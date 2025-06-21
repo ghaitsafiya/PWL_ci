@@ -16,11 +16,11 @@
         </div> 
         <div class="col-12">
             <label for="kelurahan" class="form-label">Kelurahan</label>
-            <select class="form-control" id="kelurahan" nama="kelurahan" required></select>
+            <select class="form-control" id="kelurahan" name="kelurahan" required></select>
         </div>
         <div class="col-12">
             <label for="layanan" class="form-label">Layanan</label>
-            <select class="form-control" id="layanan" nama="layanan" required></select>
+            <select class="form-control" id="layanan" name="layanan" required></select>
         </div>
         <div class="col-12">
             <label for="ongkir" class="form-label">Ongkir</label>
@@ -77,6 +77,7 @@
     </div>
 </div>
 <?= $this->endSection() ?>
+
 <?= $this->section('script') ?>
 <script>
 $(document).ready(function() {
@@ -99,10 +100,10 @@ $(document).ready(function() {
             processResults: function (data) {
                 return {
                     results: data.map(function(item) {
-                    return {
-                        id: item.id,
-                        text: item.subdistrict_name + ", " + item.district_name + ", " + item.city_name + ", " + item.province_name + ", " + item.zip_code
-                    };
+                        return {
+                            id: item.id,
+                            text: item.subdistrict_name + ", " + item.district_name + ", " + item.city_name + ", " + item.province_name + ", " + item.zip_code
+                        };
                     })
                 };
             },
@@ -123,15 +124,23 @@ $(document).ready(function() {
                 'destination': id_kelurahan, 
             },
             dataType: 'json',
-            success: function(data) { 
+            success: function(data) {
+                $("#layanan").empty();
+
                 data.forEach(function(item) {
-                    var text = item["description"] + " (" + item["service"] + ") : estimasi " + item["etd"] + "";
+                    let cost = item["cost"];
+                    if (typeof cost === 'object' && cost.value) {
+                        cost = cost.value;
+                    }
+
+                    let text = `${item.description} (${item.service}) : estimasi ${item.etd}`;
                     $("#layanan").append($('<option>', {
-                        value: item["cost"],
+                        value: cost,
                         text: text 
                     }));
                 });
-                hitungTotal(); 
+
+                $("#layanan").trigger('change'); // trigger hitung total langsung
             },
         });
     });
@@ -140,7 +149,7 @@ $(document).ready(function() {
         ongkir = parseInt($(this).val());
         hitungTotal();
     });
-    
+
     function hitungTotal() {
         total = ongkir + <?= $total ?>;
 

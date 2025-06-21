@@ -73,5 +73,6 @@ if(uri_string()!=""){
     <!-- Custom js for this page -->
     <script src="<?= base_url()?>PurpleAdmin/assets/js/dashboard.js"></script>
     <!-- End custom js for this page -->
+
   </body>
 </html>

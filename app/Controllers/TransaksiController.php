@@ -103,10 +103,10 @@ class TransaksiController extends BaseController
 
     public function getCost()
     { 
-            //ID lokasi yang dikirimkan dari halaman checkout
+        //ID lokasi yang dikirimkan dari halaman checkout
         $destination = $this->request->getGet('destination');
 
-            //parameter daerah asal pengiriman, berat produk, dan kurir dibuat statis
+        //parameter daerah asal pengiriman, berat produk, dan kurir dibuat statis
         //valuenya => 64999 : PEDURUNGAN TENGAH , 1000 gram, dan JNE
         $response = $this->client->request(
             'POST', 
